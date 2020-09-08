@@ -25,9 +25,9 @@ async function run(): Promise<void> {
       pr.created_at
     })
 
-    core.info(`pr comment review : ${reviewCommentUrls}`)
-    core.info(`pr comment : ${commentUrls}`)
-    core.info(`pr created : ${createdList}`)
+    core.info(`pr comment review : ${reviewCommentUrls[0]}`)
+    core.info(`pr comment : ${commentUrls[0]}`)
+    core.info(`pr created : ${createdList[0]}`)
     // eslint-disable-next-line no-empty
   } catch (error) {}
 }
