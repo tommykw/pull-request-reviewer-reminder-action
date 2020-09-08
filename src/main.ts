@@ -16,6 +16,7 @@ async function run(): Promise<void> {
     })
 
     core.info(`pr comment: ${reviewCommentUrls}`)
+    core.info(`pr comment: ${reviewCommentUrls}`)
     // eslint-disable-next-line no-empty
   } catch (error) {}
 }
