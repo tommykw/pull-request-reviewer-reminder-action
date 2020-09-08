@@ -12,7 +12,6 @@ async function run(): Promise<void> {
     core.info(`pr num1: ${pullRequests.length}`)
 
     core.info(`pr info: ${pullRequests}`)
-    core
 
     const reviewCommentUrls = pullRequests.map(pr => {
       pr.review_comments_url
@@ -34,11 +33,16 @@ async function run(): Promise<void> {
       pr.body
     })
 
+    const prIds = pullRequests.map(pr => {
+      pr.id
+    })
+
     core.info(`pr comment review : ${reviewCommentUrls}`)
     core.info(`pr comment : ${commentUrls}`)
     core.info(`pr created : ${createdList}`)
     core.info(`pr title : ${titles}`)
     core.info(`pr bodies : ${bodies}`)
+    core.info(`pr ids : ${prIds}`)
     // eslint-disable-next-line no-empty
   } catch (error) {}
 }

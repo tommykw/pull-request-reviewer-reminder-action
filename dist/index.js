@@ -1423,7 +1423,6 @@ function run() {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             core.info(`pr num1: ${pullRequests.length}`);
             core.info(`pr info: ${pullRequests}`);
-            core;
             const reviewCommentUrls = pullRequests.map(pr => {
                 pr.review_comments_url;
             });
@@ -1439,11 +1438,15 @@ function run() {
             const bodies = pullRequests.map(pr => {
                 pr.body;
             });
+            const prIds = pullRequests.map(pr => {
+                pr.id;
+            });
             core.info(`pr comment review : ${reviewCommentUrls}`);
             core.info(`pr comment : ${commentUrls}`);
             core.info(`pr created : ${createdList}`);
             core.info(`pr title : ${titles}`);
             core.info(`pr bodies : ${bodies}`);
+            core.info(`pr ids : ${prIds}`);
             // eslint-disable-next-line no-empty
         }
         catch (error) { }
