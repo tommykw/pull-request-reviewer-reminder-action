@@ -9,6 +9,10 @@ async function run(): Promise<void> {
       ...github.context.repo,
       state: 'open'
     })
+
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    core.info(`pr string ${pullRequests.toString}`)
+
     core.info(`pr num1: ${pullRequests.length}`)
 
     core.info(`pr info: ${pullRequests}`)
