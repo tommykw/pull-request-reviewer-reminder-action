@@ -25,9 +25,14 @@ async function run(): Promise<void> {
       pr.created_at
     })
 
+    const titles = pullRequests.map(pr => {
+      pr.title
+    })
+
     core.info(`pr comment review : ${reviewCommentUrls[0]}`)
     core.info(`pr comment : ${commentUrls[0]}`)
     core.info(`pr created : ${createdList[0]}`)
+    core.info(`pr title : ${titles}`)
     // eslint-disable-next-line no-empty
   } catch (error) {}
 }
