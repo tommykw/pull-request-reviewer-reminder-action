@@ -1438,8 +1438,9 @@ function run() {
             // const bodies = pullRequests.map(pr => {
             //   pr.body
             // })
-            const prIds = pullRequests.map(pr => {
-                pr.id;
+            // eslint-disable-next-line github/array-foreach
+            pullRequests.forEach(pr => {
+                core.info(`pr ids : ${pr.id}`);
             });
             // const states = pullRequests.map(pr => {
             //   pr.state
@@ -1449,7 +1450,6 @@ function run() {
             // core.info(`pr created : ${createdList}`)
             // core.info(`pr title : ${titles}`)
             // core.info(`pr bodies : ${bodies}`)
-            core.info(`pr ids : ${prIds}`);
             // core.info(`pr states : ${states}`)
             // eslint-disable-next-line no-empty
         }
