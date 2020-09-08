@@ -11,9 +11,7 @@ async function run(): Promise<void> {
     })
     core.info(`pr num1: ${pullRequests.length}`)
 
-    core.info(`pr info: ${pullRequests}`)
-
-    core.error(`test`)
+    core.info(`test`)
 
     const reviewCommentUrls = pullRequests.map(pr => {
       pr.review_comments_url
