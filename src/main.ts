@@ -9,7 +9,7 @@ async function run(): Promise<void> {
       ...github.context.repo,
       state: 'open'
     })
-    core.info(`pr num: ${pullRequests.length}`)
+    core.info(`pr num1: ${pullRequests.length}`)
 
     core.info(`pr info: ${pullRequests}`)
 
