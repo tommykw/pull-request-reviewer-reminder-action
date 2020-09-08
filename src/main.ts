@@ -10,6 +10,12 @@ async function run(): Promise<void> {
       state: 'open'
     })
     core.info(`pr num: ${pullRequests.length}`)
+
+    const reviewCommentUrls = pullRequests.map(pr => {
+      pr.review_comments_url
+    })
+
+    core.info(`pr comment: ${reviewCommentUrls}`)
     // eslint-disable-next-line no-empty
   } catch (error) {}
 }

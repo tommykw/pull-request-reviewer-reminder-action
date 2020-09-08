@@ -1422,6 +1422,10 @@ function run() {
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             core.info(`pr num: ${pullRequests.length}`);
+            const reviewCommentUrls = pullRequests.map(pr => {
+                pr.review_comments_url;
+            });
+            core.info(`pr comment: ${reviewCommentUrls}`);
             // eslint-disable-next-line no-empty
         }
         catch (error) { }
