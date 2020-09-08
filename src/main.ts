@@ -38,6 +38,16 @@ async function run(): Promise<void> {
     pullRequests.forEach(pr => {
       core.info(`pr ids : ${pr.id}`)
     })
+
+    const ids = pullRequests.map(pr => {
+      pr.id
+    })
+
+    core.info(`pr id ${ids[0]}`)
+    core.info(`pr id ${ids[1]}`)
+    core.info(`pr id ${ids[2]}`)
+    core.info(`pr id ${ids[3]}`)
+
     // const states = pullRequests.map(pr => {
     //   pr.state
     // })
