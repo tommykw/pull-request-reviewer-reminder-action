@@ -2,10 +2,15 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
+  github_token:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'GitHub token'
+  reminder_message:
+    required: true
+    description: 'Messages to send to reviewers on Github.'
+  review_turnaround_hours:
+    required: true
+    description: 'This is the deadline for reviews. If this time is exceeded, a reminder wil be send.'
 runs:
   using: 'node12'
   main: 'dist/index.js'
