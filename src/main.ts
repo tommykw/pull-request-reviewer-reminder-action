@@ -10,12 +10,9 @@ async function run(): Promise<void> {
       state: 'open'
     })
 
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    core.info(`pr string ${pullRequests.toString}`)
+    core.info(`pr num: ${pullRequests.length}`)
 
-    core.info(`pr num1: ${pullRequests.length}`)
-
-    core.info(`pr info: ${pullRequests}`)
+    core.info(`pr info: ${JSON.stringify(pullRequests)}`)
 
     const reviewCommentUrls = pullRequests.map(pr => {
       pr.review_comments_url
