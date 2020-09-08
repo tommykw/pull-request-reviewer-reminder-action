@@ -1441,12 +1441,16 @@ function run() {
             const prIds = pullRequests.map(pr => {
                 pr.id;
             });
+            const states = pullRequests.map(pr => {
+                pr.state;
+            });
             core.info(`pr comment review : ${reviewCommentUrls}`);
             core.info(`pr comment : ${commentUrls}`);
             core.info(`pr created : ${createdList}`);
             core.info(`pr title : ${titles}`);
             core.info(`pr bodies : ${bodies}`);
             core.info(`pr ids : ${prIds}`);
+            core.info(`pr states : ${states}`);
             // eslint-disable-next-line no-empty
         }
         catch (error) { }
