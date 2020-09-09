@@ -1427,8 +1427,7 @@ function run() {
                     continue;
                 }
                 const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                core.info(`title ${pr.title} created ${pr.created_at}`);
-                core.info(`title ${pr.title} created ${pr.created_at}`);
+                core.info(`title ${pr.title} created ${pr.created_at} updated ${pr.updated_at}`);
                 if (prInfo.requested_reviewers.length === 0) {
                     continue;
                 }
