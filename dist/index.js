@@ -1433,6 +1433,7 @@ function run() {
                 if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
+                //
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
                 if (pullRequest.review_comments !== 0) {
                     continue;

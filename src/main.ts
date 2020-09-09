@@ -27,6 +27,8 @@ async function run(): Promise<void> {
         continue
       }
 
+      //
+
       const {data: pullRequest} = await octokit.pulls.get({
         ...github.context.repo,
         pull_number: pr.number
