@@ -1438,7 +1438,7 @@ function run() {
                         issue_number: prInfo.number,
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
-                        body: 'コメントないよ'
+                        body: 'コメントないよ！'
                     });
                 }
             }
