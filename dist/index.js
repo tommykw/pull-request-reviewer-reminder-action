@@ -1422,10 +1422,6 @@ function run() {
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             core.info(`PullRequest count : ${pullRequests.length}`);
-            const a = pullRequests.map(b => {
-                return b.id;
-            });
-            core.info(`!!!!!!!!!1 a ${a}`);
             for (const pr of pullRequests) {
                 const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
                 if (prInfo.review_comments === 0) {
@@ -1437,12 +1433,15 @@ function run() {
                         core.info(`reviewer type ${r.type}`);
                         r.login;
                     });
+                    const reviewers = prInfo.requested_reviewers
+                        .map(rr => `@${rr.login}`)
+                        .join(', ');
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const { data: result } = yield octokit.issues.createComment({
                         issue_number: prInfo.number,
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
-                        body: 'コメントないよ！'
+                        body: `${reviewers} コメントないよ！`
                     });
                 }
             }

@@ -12,11 +12,6 @@ async function run(): Promise<void> {
 
     core.info(`PullRequest count : ${pullRequests.length}`)
 
-    const a = pullRequests.map(b => {
-      return b.id
-    })
-    core.info(`!!!!!!!!!1 a ${a}`)
-
     for (const pr of pullRequests) {
       const {data: prInfo} = await octokit.pulls.get({
         ...github.context.repo,
@@ -34,12 +29,16 @@ async function run(): Promise<void> {
           r.login
         })
 
+        const reviewers = prInfo.requested_reviewers
+          .map(rr => `@${rr.login}`)
+          .join(', ')
+
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const {data: result} = await octokit.issues.createComment({
           issue_number: prInfo.number,
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
-          body: 'コメントないよ！'
+          body: `${reviewers} コメントないよ！`
         })
       }
     }
