@@ -23,7 +23,7 @@ async function run(): Promise<void> {
       })
 
       core.info(
-        `title ${pr.title} created ${pr.created_at} updated ${pr.updated_at}`
+        `title ${pr.title} acreated ${pr.created_at} updated ${pr.updated_at}`
       )
 
       if (prInfo.requested_reviewers.length === 0) {
