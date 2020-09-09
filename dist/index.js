@@ -1424,10 +1424,17 @@ function run() {
             core.info(`PullRequest count : ${pullRequests.length}`);
             for (const pr of pullRequests) {
                 const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                // core.info(`pr review comments ${pr.review_comments_url}`)
-                // core.info(`pr ids : ${pr.id}`)
-                // core.info(`pr created : ${pr.created_at}`)
-                core.info(`pr comments ${prInfo.review_comments}`);
+                if (prInfo.review_comments === 0) {
+                    // レビューコメントがなければ、
+                    core.info(`pr comments ${prInfo.review_comments}`);
+                    //octokit.pulls.createReviewComment
+                    octokit.issues.createComment({
+                        issue_number: github.context.issue.number,
+                        owner: github.context.repo.owner,
+                        repo: github.context.repo.repo,
+                        body: 'コメントないよ'
+                    });
+                }
             }
         }
         catch (error) {
