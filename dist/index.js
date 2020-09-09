@@ -1428,10 +1428,14 @@ function run() {
                     // レビューコメントがなければ、
                     core.info(`pr comments ${prInfo.review_comments}`);
                     //octokit.pulls.createReviewComment
+                    prInfo.requested_reviewers.map(r => {
+                        core.info(`reviewer ${r.login}`);
+                        core.info(`reviewer type ${r.type}`);
+                        r.login;
+                    });
                     // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const { data: result } = yield octokit.issues.createComment({
                         issue_number: prInfo.number,
-                        // issue_number: github.context.issue.number,
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
                         body: 'コメントないよ'
