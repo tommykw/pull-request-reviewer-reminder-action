@@ -12,6 +12,11 @@ async function run(): Promise<void> {
 
     core.info(`PullRequest count : ${pullRequests.length}`)
 
+    const a = pullRequests.map(b => {
+      return b.id
+    })
+    core.info(`!!!!!!!!!1 a ${a}`)
+
     for (const pr of pullRequests) {
       const {data: prInfo} = await octokit.pulls.get({
         ...github.context.repo,

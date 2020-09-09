@@ -1422,6 +1422,10 @@ function run() {
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             core.info(`PullRequest count : ${pullRequests.length}`);
+            const a = pullRequests.map(b => {
+                return b.id;
+            });
+            core.info(`!!!!!!!!!1 a ${a}`);
             for (const pr of pullRequests) {
                 const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
                 if (prInfo.review_comments === 0) {
