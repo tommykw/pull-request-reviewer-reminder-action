@@ -1427,14 +1427,13 @@ function run() {
                     continue;
                 }
                 const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                core.info(`created ${pr.created_at}`);
+                core.info(`title ${pr.title} created ${pr.created_at}`);
                 if (prInfo.requested_reviewers.length === 0) {
                     continue;
                 }
                 if (prInfo.review_comments !== 0) {
                     continue;
                 }
-                core.info(`pr comments ${prInfo.review_comments}`);
                 const reviewers = prInfo.requested_reviewers
                     .map(rr => `@${rr.login}`)
                     .join(', ');
