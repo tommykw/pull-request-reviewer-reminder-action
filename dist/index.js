@@ -1428,7 +1428,8 @@ function run() {
                     // レビューコメントがなければ、
                     core.info(`pr comments ${prInfo.review_comments}`);
                     //octokit.pulls.createReviewComment
-                    yield octokit.issues.createComment({
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { data: result } = yield octokit.issues.createComment({
                         issue_number: github.context.issue.number,
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
