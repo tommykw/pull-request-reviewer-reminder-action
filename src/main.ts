@@ -21,7 +21,7 @@ async function run(): Promise<void> {
       // core.info(`pr ids : ${pr.id}`)
       // core.info(`pr created : ${pr.created_at}`)
 
-      core.info(`pr comments ${prInfo.comments}`)
+      core.info(`pr comments ${prInfo.review_comments}`)
     }
   } catch (error) {
     core.setFailed(error.message)
