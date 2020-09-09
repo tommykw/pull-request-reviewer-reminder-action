@@ -13,34 +13,38 @@ async function run(): Promise<void> {
     core.info(`PullRequest count : ${pullRequests.length}`)
 
     for (const pr of pullRequests) {
+      if (pr.draft) {
+        continue
+      }
+
       const {data: prInfo} = await octokit.pulls.get({
         ...github.context.repo,
         pull_number: pr.number
       })
 
-      if (prInfo.review_comments === 0) {
-        // レビューコメントがなければ、
-        core.info(`pr comments ${prInfo.review_comments}`)
+      core.info(`created ${pr.created_at}`)
 
-        //octokit.pulls.createReviewComment
-        prInfo.requested_reviewers.map(r => {
-          core.info(`reviewer ${r.login}`)
-          core.info(`reviewer type ${r.type}`)
-          r.login
-        })
-
-        const reviewers = prInfo.requested_reviewers
-          .map(rr => `@${rr.login}`)
-          .join(', ')
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const {data: result} = await octokit.issues.createComment({
-          issue_number: prInfo.number,
-          owner: github.context.repo.owner,
-          repo: github.context.repo.repo,
-          body: `${reviewers} コメントないよ！`
-        })
+      if (prInfo.requested_reviewers.length === 0) {
+        continue
       }
+
+      if (prInfo.review_comments !== 0) {
+        continue
+      }
+
+      core.info(`pr comments ${prInfo.review_comments}`)
+
+      const reviewers = prInfo.requested_reviewers
+        .map(rr => `@${rr.login}`)
+        .join(', ')
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {data: result} = await octokit.issues.createComment({
+        issue_number: prInfo.number,
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        body: `${reviewers} コメントないよ！`
+      })
     }
   } catch (error) {
     core.setFailed(error.message)
