@@ -1438,11 +1438,11 @@ function run() {
             // const bodies = pullRequests.map(pr => {
             //   pr.body
             // })
-            // eslint-disable-next-line github/array-foreach
-            pullRequests.forEach(pr => {
+            for (const pr of pullRequests) {
                 core.info(`pr ids : ${pr.id}`);
-            });
+            }
             const ids = pullRequests.map(pr => {
+                core.info(`tpr id ${pr.id}`);
                 pr.id;
             });
             core.info(`pr id ${ids[0]}`);
