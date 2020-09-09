@@ -23,6 +23,7 @@ async function run(): Promise<void> {
       })
 
       core.info(`created ${pr.created_at}`)
+      core.info(`created ${pr.created_at}`)
 
       if (prInfo.requested_reviewers.length === 0) {
         continue
