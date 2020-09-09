@@ -1421,29 +1421,26 @@ function run() {
         const octokit = github.getOctokit(core.getInput('github_token'));
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
-            core.info(`PullRequest count : ${pullRequests.length}`);
             for (const pr of pullRequests) {
                 if (pr.draft) {
                     continue;
                 }
-                const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                core.info(`title ${pr.title} acreated ${pr.created_at} updated ${pr.updated_at} pushed ${pr.head.repo.pushed_at}`);
-                if (prInfo.requested_reviewers.length === 0) {
+                if (pr.requested_reviewers.length === 0) {
                     continue;
                 }
-                if (prInfo.review_comments !== 0) {
+                const currentTime = new Date().getTime();
+                const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;
+                if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
-                const reviewers = prInfo.requested_reviewers
+                const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
+                if (pullRequest.review_comments !== 0) {
+                    continue;
+                }
+                const reviewers = pullRequest.requested_reviewers
                     .map(rr => `@${rr.login}`)
                     .join(', ');
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { data: result } = yield octokit.issues.createComment({
-                    issue_number: prInfo.number,
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    body: `${reviewers} コメントないよ！`
-                });
+                yield octokit.issues.createComment(Object.assign(Object.assign({}, github.context.repo), { issue_number: pullRequest.number, body: `${reviewers} \nレビュー開始から1営業日経過しました。レビューをなるべく優先しましょう。` }));
             }
         }
         catch (error) {
