@@ -1423,8 +1423,11 @@ function run() {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             core.info(`PullRequest count : ${pullRequests.length}`);
             for (const pr of pullRequests) {
-                core.info(`pr review comments ${pr.review_comments_url}`);
-                core.info(`pr ids : ${pr.id}`);
+                const { data: prInfo } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
+                // core.info(`pr review comments ${pr.review_comments_url}`)
+                // core.info(`pr ids : ${pr.id}`)
+                // core.info(`pr created : ${pr.created_at}`)
+                core.info(`pr comments ${prInfo.comments}`);
             }
         }
         catch (error) {
