@@ -1428,7 +1428,7 @@ function run() {
                     // レビューコメントがなければ、
                     core.info(`pr comments ${prInfo.review_comments}`);
                     //octokit.pulls.createReviewComment
-                    octokit.issues.createComment({
+                    yield octokit.issues.createComment({
                         issue_number: github.context.issue.number,
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
