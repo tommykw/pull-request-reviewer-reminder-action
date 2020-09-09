@@ -1427,7 +1427,7 @@ function run() {
                 // core.info(`pr review comments ${pr.review_comments_url}`)
                 // core.info(`pr ids : ${pr.id}`)
                 // core.info(`pr created : ${pr.created_at}`)
-                core.info(`pr comments ${prInfo.comments}`);
+                core.info(`pr comments ${prInfo.review_comments}`);
             }
         }
         catch (error) {
