@@ -10,56 +10,15 @@ async function run(): Promise<void> {
       state: 'open'
     })
 
-    core.info(`pr num: ${pullRequests.length}`)
-
-    //core.info(`pr info: ${JSON.stringify(pullRequests)}`)
-
-    // const reviewCommentUrls = pullRequests.map(pr => {
-    //   pr.review_comments_url
-    // })
-
-    // const commentUrls = pullRequests.map(pr => {
-    //   pr.comments_url
-    // })
-
-    // const createdList = pullRequests.map(pr => {
-    //   pr.created_at
-    // })
-
-    // const titles = pullRequests.map(pr => {
-    //   pr.title
-    // })
-
-    // const bodies = pullRequests.map(pr => {
-    //   pr.body
-    // })
+    core.info(`PullRequest count : ${pullRequests.length}`)
 
     for (const pr of pullRequests) {
+      core.info(`pr review comments ${pr.review_comments_url}`)
       core.info(`pr ids : ${pr.id}`)
     }
-
-    const ids = pullRequests.map(pr => {
-      core.info(`tpr id ${pr.id}`)
-      pr.id
-    })
-
-    core.info(`pr id ${ids[0]}`)
-    core.info(`pr id ${ids[1]}`)
-    core.info(`pr id ${ids[2]}`)
-    core.info(`pr id ${ids[3]}`)
-
-    // const states = pullRequests.map(pr => {
-    //   pr.state
-    // })
-
-    // core.info(`pr comment review : ${reviewCommentUrls}`)
-    // core.info(`pr comment : ${commentUrls}`)
-    // core.info(`pr created : ${createdList}`)
-    // core.info(`pr title : ${titles}`)
-    // core.info(`pr bodies : ${bodies}`)
-    // core.info(`pr states : ${states}`)
-    // eslint-disable-next-line no-empty
-  } catch (error) {}
+  } catch (error) {
+    core.setFailed(error.message)
+  }
 }
 
 run()
