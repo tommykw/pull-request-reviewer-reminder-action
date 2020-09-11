@@ -20,31 +20,31 @@ async function run(): Promise<void> {
       }
 
       core.info(`${pr.number}`)
-      const result = await octokit.graphql(
-        `
-        query($owner: String!, $name: String!, $number: Int!) {
-          repository(owner: $owner, name: $name) {
-            pullRequest(number: $number) {
-              timelineItems(first: 20, itemTypes: [READY_FOR_REVIEW_EVENT]) {
-                nodes {
-                  __typename
-                  ... on ReadyForReviewEvent {
-                    createdAt
-                  }
-                }
-              }
-            }
-          }
-        }
-        `,
-        {
-          owner: github.context.repo.owner,
-          name: github.context.repo.repo,
-          number: pr.number
-        }
-      )
+      // const result = await octokit.graphql(
+      //   `
+      //   query($owner: String!, $name: String!, $number: Int!) {
+      //     repository(owner: $owner, name: $name) {
+      //       pullRequest(number: $number) {
+      //         timelineItems(first: 20, itemTypes: [READY_FOR_REVIEW_EVENT]) {
+      //           nodes {
+      //             __typename
+      //             ... on ReadyForReviewEvent {
+      //               createdAt
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      //   `,
+      //   {
+      //     owner: github.context.repo.owner,
+      //     name: github.context.repo.repo,
+      //     number: pr.number
+      //   }
+      // )
 
-      core.info(`${JSON.stringify(result)}`)
+      // core.info(`${JSON.stringify(result)}`)
 
       const currentTime = new Date().getTime()
       const pullRequestCreatedTime =
