@@ -19,7 +19,7 @@ async function run(): Promise<void> {
         continue
       }
 
-      core.info(`${pr.number}`)
+      core.info(`test ${pr.number}`)
       // const result = await octokit.graphql(
       //   `
       //   query($owner: String!, $name: String!, $number: Int!) {
