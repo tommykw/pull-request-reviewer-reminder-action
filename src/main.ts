@@ -13,6 +13,32 @@ async function run(): Promise<void> {
     for (const pr of pullRequests) {
       core.info(`test ${pr.number}`)
 
+      const result = await octokit.graphql(
+        `
+        query($owner: String!, $name: String!, $number: Int!) {
+          repository(owner: $owner, name: $name) {
+            pullRequest(number: $number) {
+              timelineItems(first: 20, itemTypes: [READY_FOR_REVIEW_EVENT]) {
+                nodes {
+                  __typename
+                  ... on ReadyForReviewEvent {
+                    createdAt
+                  }
+                }
+              }
+            }
+          }
+        }
+        `,
+        {
+          owner: github.context.repo.owner,
+          name: github.context.repo.repo,
+          number: pr.number
+        }
+      )
+
+      core.info(`${JSON.stringify(result)}`)
+
       if (pr.draft) {
         continue
       }
@@ -20,32 +46,6 @@ async function run(): Promise<void> {
       if (pr.requested_reviewers.length === 0) {
         continue
       }
-
-      // const result = await octokit.graphql(
-      //   `
-      //   query($owner: String!, $name: String!, $number: Int!) {
-      //     repository(owner: $owner, name: $name) {
-      //       pullRequest(number: $number) {
-      //         timelineItems(first: 20, itemTypes: [READY_FOR_REVIEW_EVENT]) {
-      //           nodes {
-      //             __typename
-      //             ... on ReadyForReviewEvent {
-      //               createdAt
-      //             }
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      //   `,
-      //   {
-      //     owner: github.context.repo.owner,
-      //     name: github.context.repo.repo,
-      //     number: pr.number
-      //   }
-      // )
-
-      // core.info(`${JSON.stringify(result)}`)
 
       const currentTime = new Date().getTime()
       const pullRequestCreatedTime =
