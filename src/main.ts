@@ -19,7 +19,8 @@ async function run(): Promise<void> {
         continue
       }
 
-      const result = octokit.graphql(
+      core.info(`${pr.number}`)
+      const result = await octokit.graphql(
         `
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
@@ -43,7 +44,6 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(`debug `)
       core.info(`${JSON.stringify(result)}`)
 
       const currentTime = new Date().getTime()

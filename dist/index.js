@@ -1428,7 +1428,8 @@ function run() {
                 if (pr.requested_reviewers.length === 0) {
                     continue;
                 }
-                const result = octokit.graphql(`
+                core.info(`${pr.number}`);
+                const result = yield octokit.graphql(`
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
@@ -1448,7 +1449,6 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                core.info(`debug `);
                 core.info(`${JSON.stringify(result)}`);
                 const currentTime = new Date().getTime();
                 const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;
