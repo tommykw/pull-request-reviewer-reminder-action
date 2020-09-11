@@ -1448,6 +1448,7 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
+                core.info(`debug `);
                 core.info(`${JSON.stringify(result)}`);
                 const currentTime = new Date().getTime();
                 const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;

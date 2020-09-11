@@ -43,6 +43,7 @@ async function run(): Promise<void> {
         }
       )
 
+      core.info(`debug `)
       core.info(`${JSON.stringify(result)}`)
 
       const currentTime = new Date().getTime()
