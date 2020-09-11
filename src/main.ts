@@ -11,6 +11,8 @@ async function run(): Promise<void> {
     })
 
     for (const pr of pullRequests) {
+      core.info(`test ${pr.number}`)
+
       if (pr.draft) {
         continue
       }
@@ -19,7 +21,6 @@ async function run(): Promise<void> {
         continue
       }
 
-      core.info(`test ${pr.number}`)
       // const result = await octokit.graphql(
       //   `
       //   query($owner: String!, $name: String!, $number: Int!) {
