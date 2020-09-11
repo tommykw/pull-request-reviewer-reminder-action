@@ -1428,6 +1428,27 @@ function run() {
                 if (pr.requested_reviewers.length === 0) {
                     continue;
                 }
+                const result = octokit.graphql(`
+        query($owner: String!, $name: String!, $number: Int!) {
+          repository(owner: $owner, name: $name) {
+            pullRequest(number: $number) {
+              timelineItems(first: 20, itemTypes: [READY_FOR_REVIEW_EVENT]) {
+                nodes {
+                  __typename
+                  ... on ReadyForReviewEvent {
+                    createdAt
+                  }
+                }
+              }
+            }
+          }
+        }
+        `, {
+                    owner: github.context.repo.owner,
+                    name: github.context.repo.repo,
+                    number: pr.number
+                });
+                core.info(`${JSON.stringify(result)}`);
                 const currentTime = new Date().getTime();
                 const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;
                 if (currentTime > pullRequestCreatedTime) {
