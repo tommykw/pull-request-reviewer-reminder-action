@@ -37,9 +37,7 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(
-        `${prRequestedEvent?.repository.pullRequest.timelineItems.nodes.length}`
-      )
+      core.info(`${prRequestedEvent?.repository}`)
       core.info(`${JSON.stringify(prRequestedEvent)}`)
 
       if (pr.draft) {

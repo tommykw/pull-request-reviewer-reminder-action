@@ -1443,7 +1443,7 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                core.info(`${prRequestedEvent === null || prRequestedEvent === void 0 ? void 0 : prRequestedEvent.repository.pullRequest.timelineItems.nodes.length}`);
+                core.info(`${prRequestedEvent === null || prRequestedEvent === void 0 ? void 0 : prRequestedEvent.repository}`);
                 core.info(`${JSON.stringify(prRequestedEvent)}`);
                 if (pr.draft) {
                     continue;
