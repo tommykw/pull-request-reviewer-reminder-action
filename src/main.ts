@@ -13,7 +13,7 @@ async function run(): Promise<void> {
     for (const pr of pullRequests) {
       core.info(`test ${pr.title}`)
 
-      const {prRequestedEvent} = await octokit.graphql({
+      const prRequestedEvent = await octokit.graphql({
         query: `query prRequestedEvent($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
@@ -33,8 +33,8 @@ async function run(): Promise<void> {
         number: pr.number
       })
 
-      core.info(prRequestedEvent)
-      //core.info(`${JSON.stringify(prRequestedEvent)}`)
+      //core.info(prRequestedEvent)
+      core.info(`${JSON.stringify(prRequestedEvent)}`)
 
       if (pr.draft) {
         continue
