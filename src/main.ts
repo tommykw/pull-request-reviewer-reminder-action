@@ -37,8 +37,8 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(`${prRequestedEvent?.repository}`)
-      core.info(`${JSON.stringify(prRequestedEvent)}`)
+      core.info(`${prRequestedEvent}`)
+      //core.info(`${JSON.stringify(prRequestedEvent)}`)
 
       if (pr.draft) {
         continue
