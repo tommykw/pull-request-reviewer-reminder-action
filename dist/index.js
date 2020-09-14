@@ -1427,10 +1427,10 @@ function run() {
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
-              timelineItems(first: 20, itemTypes: [READY_FOR_REVIEW_EVENT]) {
+              timelineItems(first: 20, itemTypes: [REVIEW_REQUESTED_EVENT]) {
                 nodes {
                   __typename
-                  ... on ReadyForReviewEvent {
+                  ... on ReviewRequestedEvent {
                     createdAt
                   }
                 }
