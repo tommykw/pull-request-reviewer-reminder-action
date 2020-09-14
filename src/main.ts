@@ -13,9 +13,8 @@ async function run(): Promise<void> {
     for (const pr of pullRequests) {
       core.info(`test ${pr.title}`)
 
-      const {prRequestedEvent} = await octokit.graphql(
-        `
-        query($owner: String!, $name: String!, $number: Int!) {
+      const {prRequestedEvent} = await octokit.graphql({
+        query: `query prRequestedEvent($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
               timelineItems(first: 20, itemTypes: [REVIEW_REQUESTED_EVENT]) {
@@ -28,14 +27,11 @@ async function run(): Promise<void> {
               }
             }
           }
-        }
-        `,
-        {
-          owner: github.context.repo.owner,
-          name: github.context.repo.repo,
-          number: pr.number
-        }
-      )
+        }`,
+        owner: github.context.repo.owner,
+        name: github.context.repo.repo,
+        number: pr.number
+      })
 
       core.info(prRequestedEvent)
       //core.info(`${JSON.stringify(prRequestedEvent)}`)
