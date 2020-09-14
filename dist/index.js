@@ -1443,7 +1443,7 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                core.info(`${prRequestedEvent}`);
+                core.info(prRequestedEvent);
                 //core.info(`${JSON.stringify(prRequestedEvent)}`)
                 if (pr.draft) {
                     continue;

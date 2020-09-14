@@ -37,7 +37,7 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(`${prRequestedEvent}`)
+      core.info(prRequestedEvent)
       //core.info(`${JSON.stringify(prRequestedEvent)}`)
 
       if (pr.draft) {
