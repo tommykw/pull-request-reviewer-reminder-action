@@ -11,7 +11,7 @@ async function run(): Promise<void> {
     })
 
     for (const pr of pullRequests) {
-      core.info(`test ${pr.title}`)
+      core.info(`title ${pr.title}`)
 
       const prRequestedReponse = await octokit.graphql(
         `
@@ -41,7 +41,7 @@ async function run(): Promise<void> {
       const response = prRequestedReponse as PrRequestedResponse
       const node = response.repository.pullRequest.timelineItems.nodes[0]
 
-      if (node.createdAt == null) {
+      if (node?.createdAt == null) {
         continue
       }
 
