@@ -1423,8 +1423,8 @@ function run() {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             for (const pr of pullRequests) {
                 core.info(`test ${pr.title}`);
-                const { prRequestedEvent } = yield octokit.graphql(`
-        query prRequestedEvent($owner: String!, $name: String!, $number: Int!) {
+                const prRequestedReponse = yield octokit.graphql(`
+        query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
               timelineItems(first: 20, itemTypes: [REVIEW_REQUESTED_EVENT]) {
@@ -1443,7 +1443,9 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                core.info(prRequestedEvent);
+                const response = prRequestedReponse;
+                core.info(`response ${response.repository}`);
+                //core.info(`${prRequestedReponse.repository}`)
                 //core.info(`${JSON.stringify(prRequestedEvent)}`)
                 if (pr.draft) {
                     continue;

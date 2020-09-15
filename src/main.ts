@@ -13,9 +13,9 @@ async function run(): Promise<void> {
     for (const pr of pullRequests) {
       core.info(`test ${pr.title}`)
 
-      const {prRequestedEvent} = await octokit.graphql(
+      const prRequestedReponse = await octokit.graphql(
         `
-        query prRequestedEvent($owner: String!, $name: String!, $number: Int!) {
+        query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
               timelineItems(first: 20, itemTypes: [REVIEW_REQUESTED_EVENT]) {
@@ -37,7 +37,11 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(prRequestedEvent)
+      const response = prRequestedReponse as PrRequestedResponse
+
+      core.info(`response ${response.repository}`)
+
+      //core.info(`${prRequestedReponse.repository}`)
       //core.info(`${JSON.stringify(prRequestedEvent)}`)
 
       if (pr.draft) {
@@ -77,6 +81,21 @@ async function run(): Promise<void> {
     }
   } catch (error) {
     core.setFailed(error.message)
+  }
+}
+
+interface PrRequestedResponse {
+  repository: {
+    pullRequest: {
+      timelineItems: {
+        nodes: [
+          {
+            __typename: string
+            createdAt: string
+          }
+        ]
+      }
+    }
   }
 }
 
