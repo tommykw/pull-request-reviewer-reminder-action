@@ -41,6 +41,9 @@ async function run(): Promise<void> {
       const response = prRequestedReponse as PrRequestedResponse
       const node = response.repository.pullRequest.timelineItems.nodes[0]
 
+      core.debug(`node ${node}`)
+      core.debug(`node c ${node?.createdAt}`)
+
       if (node?.createdAt == null) {
         continue
       }
