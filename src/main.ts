@@ -88,7 +88,7 @@ async function run(): Promise<void> {
         pull_number: pr.number
       })
 
-      core.info(JSON.stringify(pullRequest))
+      //core.info(JSON.stringify(pullRequest))
 
       core.info(`review comments ${pullRequest.review_comments}`)
       if (pullRequest.review_comments !== 0) {
