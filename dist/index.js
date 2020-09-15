@@ -1446,6 +1446,7 @@ function run() {
                 const currentTime = new Date().getTime();
                 const response = prRequestedReponse;
                 const node = response.repository.pullRequest.timelineItems.nodes[0];
+                core.debug(`node before`);
                 core.debug(`node ${node}`);
                 core.debug(`node c ${node === null || node === void 0 ? void 0 : node.createdAt}`);
                 if ((node === null || node === void 0 ? void 0 : node.createdAt) == null) {
