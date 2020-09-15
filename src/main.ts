@@ -45,7 +45,7 @@ async function run(): Promise<void> {
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
-              timelineItems(first: 50, state: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+              timelineItems(first: 50, reviews: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
                 nodes {
                   __typename
                   ... on PullRequestReview {
