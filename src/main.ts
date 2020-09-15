@@ -11,7 +11,7 @@ async function run(): Promise<void> {
     })
 
     for (const pr of pullRequests) {
-      core.info(`title ${pr.title}`)
+      core.info(`pr title ${pr.title}`)
 
       const prRequestedReponse = await octokit.graphql(
         `
@@ -47,9 +47,12 @@ async function run(): Promise<void> {
       const prCreatedAt =
         response.repository.pullRequest.timelineItems.nodes[0].createdAt
 
-      const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60
+      const pullRequestCreatedTime =
+        new Date(prCreatedAt).getTime() + 60 * 60 * 24
 
-      core.info(`${currentTime} > ${pullRequestCreatedTime}`)
+      core.info(
+        `currentTime: ${currentTime} pullRequestCreatedTime: ${pullRequestCreatedTime}`
+      )
       if (currentTime < pullRequestCreatedTime) {
         continue
       }

@@ -1422,7 +1422,7 @@ function run() {
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             for (const pr of pullRequests) {
-                core.info(`title ${pr.title}`);
+                core.info(`pr title ${pr.title}`);
                 const prRequestedReponse = yield octokit.graphql(`
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
@@ -1449,8 +1449,8 @@ function run() {
                     continue;
                 }
                 const prCreatedAt = response.repository.pullRequest.timelineItems.nodes[0].createdAt;
-                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60;
-                core.info(`${currentTime} > ${pullRequestCreatedTime}`);
+                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60 * 60 * 24;
+                core.info(`currentTime: ${currentTime} pullRequestCreatedTime: ${pullRequestCreatedTime}`);
                 if (currentTime < pullRequestCreatedTime) {
                     continue;
                 }
