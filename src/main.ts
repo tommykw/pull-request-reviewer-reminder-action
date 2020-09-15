@@ -48,7 +48,7 @@ async function run(): Promise<void> {
         response.repository.pullRequest.timelineItems.nodes[0].createdAt
 
       const pullRequestCreatedTime =
-        new Date(prCreatedAt).getTime() + 60 * 60 * 24
+        new Date(prCreatedAt).getTime() + 60 * 60 * 1
 
       core.info(` ${currentTime} > ${pullRequestCreatedTime}`)
       if (currentTime > pullRequestCreatedTime) {
