@@ -1477,10 +1477,10 @@ function run() {
                 }
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
                 //core.info(JSON.stringify(pullRequest))
-                if (pullRequstReviewRes.respository.pullRequest.reviews.nodes.length > 0) {
+                if (pullRequstReviewRes.repository.pullRequest.reviews.nodes.length > 0) {
                     continue;
                 }
-                core.info(`PullRequestReview createdAt: ${pullRequstReviewRes.respository.pullRequest.reviews.nodes[0].createdAt}`);
+                core.info(`PullRequestReview createdAt: ${pullRequstReviewRes.repository.pullRequest.reviews.nodes[0].createdAt}`);
                 const reviewers = pullRequest.requested_reviewers
                     .map(rr => `@${rr.login}`)
                     .join(', ');

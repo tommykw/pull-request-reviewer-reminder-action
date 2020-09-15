@@ -90,14 +90,12 @@ async function run(): Promise<void> {
 
       //core.info(JSON.stringify(pullRequest))
 
-      if (
-        pullRequstReviewRes.respository.pullRequest.reviews.nodes.length > 0
-      ) {
+      if (pullRequstReviewRes.repository.pullRequest.reviews.nodes.length > 0) {
         continue
       }
 
       core.info(
-        `PullRequestReview createdAt: ${pullRequstReviewRes.respository.pullRequest.reviews.nodes[0].createdAt}`
+        `PullRequestReview createdAt: ${pullRequstReviewRes.repository.pullRequest.reviews.nodes[0].createdAt}`
       )
 
       const reviewers = pullRequest.requested_reviewers
@@ -131,7 +129,7 @@ interface Node {
 }
 
 interface PullRequestReviewResponse {
-  respository: {
+  repository: {
     pullRequest: {
       reviews: {
         nodes: Node[]
