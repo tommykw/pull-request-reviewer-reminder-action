@@ -1449,8 +1449,8 @@ function run() {
                     continue;
                 }
                 const prCreatedAt = response.repository.pullRequest.timelineItems.nodes[0].createdAt;
-                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60 * 60 * 1;
-                core.info(` ${currentTime} > ${pullRequestCreatedTime}`);
+                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60;
+                core.info(`${currentTime} > ${pullRequestCreatedTime}`);
                 if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
