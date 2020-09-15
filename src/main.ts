@@ -40,6 +40,32 @@ async function run(): Promise<void> {
       const currentTime = new Date().getTime()
       const response = prRequestedReponse as PrRequestedResponse
 
+      const pullRequestReview = await octokit.graphql(
+        `
+        query($owner: String!, $name: String!, $number: Int!) {
+          repository(owner: $owner, name: $name) {
+            pullRequest(number: $number) {
+              timelineItems(first: 50, state: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+                nodes {
+                  __typename
+                  ... on PullRequestReview {
+                    createdAt
+                  }
+                }
+              }
+            }
+          }
+        }
+        `,
+        {
+          owner: github.context.repo.owner,
+          name: github.context.repo.repo,
+          number: pr.number
+        }
+      )
+
+      core.info(JSON.stringify(pullRequestReview))
+
       if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
         continue
       }
