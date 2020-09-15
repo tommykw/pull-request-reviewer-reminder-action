@@ -11,7 +11,7 @@ async function run(): Promise<void> {
     })
 
     for (const pr of pullRequests) {
-      core.info(`title ${pr.title}`)
+      core.info(`title2 ${pr.title}`)
 
       const prRequestedReponse = await octokit.graphql(
         `

@@ -1422,7 +1422,7 @@ function run() {
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             for (const pr of pullRequests) {
-                core.info(`title ${pr.title}`);
+                core.info(`title2 ${pr.title}`);
                 const prRequestedReponse = yield octokit.graphql(`
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
