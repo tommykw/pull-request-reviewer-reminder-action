@@ -50,7 +50,7 @@ async function run(): Promise<void> {
       const pullRequestCreatedTime =
         new Date(prCreatedAt).getTime() + 60 * 60 * 24
 
-      core.debug(`${currentTime} > ${pullRequestCreatedTime}`)
+      core.info(`${currentTime} > ${pullRequestCreatedTime}`)
       if (currentTime > pullRequestCreatedTime) {
         continue
       }
@@ -60,7 +60,7 @@ async function run(): Promise<void> {
         pull_number: pr.number
       })
 
-      core.debug(`review comments ${pullRequest.review_comments}`)
+      core.info(`review comments ${pullRequest.review_comments}`)
       if (pullRequest.review_comments !== 0) {
         continue
       }

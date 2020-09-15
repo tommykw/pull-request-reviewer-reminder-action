@@ -1450,12 +1450,12 @@ function run() {
                 }
                 const prCreatedAt = response.repository.pullRequest.timelineItems.nodes[0].createdAt;
                 const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60 * 60 * 24;
-                core.debug(`${currentTime} > ${pullRequestCreatedTime}`);
+                core.info(`${currentTime} > ${pullRequestCreatedTime}`);
                 if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                core.debug(`review comments ${pullRequest.review_comments}`);
+                core.info(`review comments ${pullRequest.review_comments}`);
                 if (pullRequest.review_comments !== 0) {
                     continue;
                 }
