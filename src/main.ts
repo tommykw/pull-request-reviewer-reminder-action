@@ -37,39 +37,33 @@ async function run(): Promise<void> {
         }
       )
 
-      core.debug(`node before`)
-      const currentTime = new Date().getTime()
-      core.debug(`node prRequestedReponse`)
-      const response = prRequestedReponse as PrRequestedResponse
-      core.debug(`node nodes`)
-      const node = response.repository.pullRequest.timelineItems.nodes[0]
-
-      core.debug(`node before`)
-      core.debug(`node ${node}`)
-      core.debug(`node c ${node?.createdAt}`)
-
-      if (node?.createdAt == null) {
+      if (pr.draft) {
         continue
       }
 
-      core.debug(`review request time ${node.createdAt}`)
+      if (pr.requested_reviewers.length === 0) {
+        continue
+      }
+
+      const currentTime = new Date().getTime()
+      const response = prRequestedReponse as PrRequestedResponse
+
+      for (const n of response.repository.pullRequest.timelineItems.nodes) {
+        core.info(`response ${n.createdAt}`)
+      }
 
       const pullRequestCreatedTime =
-        new Date(node.createdAt).getTime() + 60 * 60 * 24
-
-      core.debug(`${currentTime} > ${pullRequestCreatedTime}`)
+        new Date(pr.created_at).getTime() + 60 * 60 * 24
 
       if (currentTime > pullRequestCreatedTime) {
         continue
       }
 
-      core.debug(`check review`)
       const {data: pullRequest} = await octokit.pulls.get({
         ...github.context.repo,
         pull_number: pr.number
       })
 
-      core.debug(`review commented ${pullRequest.review_comments}`)
       if (pullRequest.review_comments !== 0) {
         continue
       }
@@ -95,8 +89,8 @@ interface PrRequestedResponse {
       timelineItems: {
         nodes: [
           {
-            __typename?: string
-            createdAt?: string
+            __typename: string
+            createdAt: string
           }
         ]
       }

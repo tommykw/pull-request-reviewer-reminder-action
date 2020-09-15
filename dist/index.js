@@ -1443,27 +1443,22 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                core.debug(`node before`);
-                const currentTime = new Date().getTime();
-                core.debug(`node prRequestedReponse`);
-                const response = prRequestedReponse;
-                core.debug(`node nodes`);
-                const node = response.repository.pullRequest.timelineItems.nodes[0];
-                core.debug(`node before`);
-                core.debug(`node ${node}`);
-                core.debug(`node c ${node === null || node === void 0 ? void 0 : node.createdAt}`);
-                if ((node === null || node === void 0 ? void 0 : node.createdAt) == null) {
+                if (pr.draft) {
                     continue;
                 }
-                core.debug(`review request time ${node.createdAt}`);
-                const pullRequestCreatedTime = new Date(node.createdAt).getTime() + 60 * 60 * 24;
-                core.debug(`${currentTime} > ${pullRequestCreatedTime}`);
+                if (pr.requested_reviewers.length === 0) {
+                    continue;
+                }
+                const currentTime = new Date().getTime();
+                const response = prRequestedReponse;
+                for (const n of response.repository.pullRequest.timelineItems.nodes) {
+                    core.info(`response ${n.createdAt}`);
+                }
+                const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;
                 if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
-                core.debug(`check review`);
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                core.debug(`review commented ${pullRequest.review_comments}`);
                 if (pullRequest.review_comments !== 0) {
                     continue;
                 }
