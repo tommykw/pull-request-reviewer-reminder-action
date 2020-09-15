@@ -1451,7 +1451,7 @@ function run() {
                 const prCreatedAt = response.repository.pullRequest.timelineItems.nodes[0].createdAt;
                 const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60;
                 core.info(`${currentTime} > ${pullRequestCreatedTime}`);
-                if (currentTime > pullRequestCreatedTime) {
+                if (currentTime < pullRequestCreatedTime) {
                     continue;
                 }
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));

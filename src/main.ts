@@ -50,7 +50,7 @@ async function run(): Promise<void> {
       const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60
 
       core.info(`${currentTime} > ${pullRequestCreatedTime}`)
-      if (currentTime > pullRequestCreatedTime) {
+      if (currentTime < pullRequestCreatedTime) {
         continue
       }
 
