@@ -1449,7 +1449,7 @@ function run() {
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
             pullRequest(number: $number) {
-              timelineItems(first: 50, reviews: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+              reviews(first: 50, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
                 nodes {
                   __typename
                   ... on PullRequestReview {
