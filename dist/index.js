@@ -1443,24 +1443,21 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                const response = prRequestedReponse;
-                for (const n of response.repository.pullRequest.timelineItems.nodes) {
-                    core.info(`response ${n.createdAt}`);
-                }
-                //core.info(`${prRequestedReponse.repository}`)
-                //core.info(`${JSON.stringify(prRequestedEvent)}`)
-                if (pr.draft) {
-                    continue;
-                }
-                if (pr.requested_reviewers.length === 0) {
-                    continue;
-                }
                 const currentTime = new Date().getTime();
-                const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;
+                const response = prRequestedReponse;
+                const node = response.repository.pullRequest.timelineItems.nodes[0];
+                if (node.createdAt == null) {
+                    continue;
+                }
+                core.debug(`review request time ${node.createdAt}`);
+                const pullRequestCreatedTime = new Date(node.createdAt).getTime() + 60 * 60 * 24;
+                core.debug(`${currentTime} > ${pullRequestCreatedTime}`);
                 if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
+                core.debug(`check review`);
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
+                core.debug(`review commented ${pullRequest.review_comments}`);
                 if (pullRequest.review_comments !== 0) {
                     continue;
                 }
