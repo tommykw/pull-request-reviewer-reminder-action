@@ -39,7 +39,9 @@ async function run(): Promise<void> {
 
       const response = prRequestedReponse as PrRequestedResponse
 
-      core.info(`response ${response.repository}`)
+      for (const n of response.repository.pullRequest.timelineItems.nodes) {
+        core.info(`response ${n.createdAt}`)
+      }
 
       //core.info(`${prRequestedReponse.repository}`)
       //core.info(`${JSON.stringify(prRequestedEvent)}`)

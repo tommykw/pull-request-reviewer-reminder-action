@@ -1444,7 +1444,9 @@ function run() {
                     number: pr.number
                 });
                 const response = prRequestedReponse;
-                core.info(`response ${response.repository}`);
+                for (const n of response.repository.pullRequest.timelineItems.nodes) {
+                    core.info(`response ${n.createdAt}`);
+                }
                 //core.info(`${prRequestedReponse.repository}`)
                 //core.info(`${JSON.stringify(prRequestedEvent)}`)
                 if (pr.draft) {
