@@ -37,24 +37,20 @@ async function run(): Promise<void> {
         }
       )
 
-      if (pr.draft) {
-        continue
-      }
-
-      if (pr.requested_reviewers.length === 0) {
-        continue
-      }
-
       const currentTime = new Date().getTime()
       const response = prRequestedReponse as PrRequestedResponse
 
-      for (const n of response.repository.pullRequest.timelineItems.nodes) {
-        core.info(`response ${n.createdAt}`)
+      if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
+        continue
       }
 
-      const pullRequestCreatedTime =
-        new Date(pr.created_at).getTime() + 60 * 60 * 24
+      const prCreatedAt =
+        response.repository.pullRequest.timelineItems.nodes[0].createdAt
 
+      const pullRequestCreatedTime =
+        new Date(prCreatedAt).getTime() + 60 * 60 * 24
+
+      core.debug(`${currentTime} > ${pullRequestCreatedTime}`)
       if (currentTime > pullRequestCreatedTime) {
         continue
       }
@@ -64,6 +60,7 @@ async function run(): Promise<void> {
         pull_number: pr.number
       })
 
+      core.debug(`review comments ${pullRequest.review_comments}`)
       if (pullRequest.review_comments !== 0) {
         continue
       }
@@ -87,15 +84,15 @@ interface PrRequestedResponse {
   repository: {
     pullRequest: {
       timelineItems: {
-        nodes: [
-          {
-            __typename: string
-            createdAt: string
-          }
-        ]
+        nodes: Node[]
       }
     }
   }
+}
+
+interface Node {
+  __typename: string
+  createdAt: string
 }
 
 run()

@@ -1443,22 +1443,19 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                if (pr.draft) {
-                    continue;
-                }
-                if (pr.requested_reviewers.length === 0) {
-                    continue;
-                }
                 const currentTime = new Date().getTime();
                 const response = prRequestedReponse;
-                for (const n of response.repository.pullRequest.timelineItems.nodes) {
-                    core.info(`response ${n.createdAt}`);
+                if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
+                    continue;
                 }
-                const pullRequestCreatedTime = new Date(pr.created_at).getTime() + 60 * 60 * 24;
+                const prCreatedAt = response.repository.pullRequest.timelineItems.nodes[0].createdAt;
+                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60 * 60 * 24;
+                core.debug(`${currentTime} > ${pullRequestCreatedTime}`);
                 if (currentTime > pullRequestCreatedTime) {
                     continue;
                 }
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
+                core.debug(`review comments ${pullRequest.review_comments}`);
                 if (pullRequest.review_comments !== 0) {
                     continue;
                 }
