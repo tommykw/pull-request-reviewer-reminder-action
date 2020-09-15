@@ -64,7 +64,7 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(JSON.stringify(pullRequestReview))
+      const pullRequstReviewRes = pullRequestReview as PullRequestReviewResponse
 
       if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
         continue
@@ -90,10 +90,15 @@ async function run(): Promise<void> {
 
       //core.info(JSON.stringify(pullRequest))
 
-      core.info(`review comments ${pullRequest.review_comments}`)
-      if (pullRequest.review_comments !== 0) {
+      if (
+        pullRequstReviewRes.respository.pullRequest.reviews.nodes.length > 0
+      ) {
         continue
       }
+
+      core.info(
+        `PullRequestReview createdAt: ${pullRequstReviewRes.respository.pullRequest.reviews.nodes[0].createdAt}`
+      )
 
       const reviewers = pullRequest.requested_reviewers
         .map(rr => `@${rr.login}`)
@@ -123,6 +128,16 @@ interface PrRequestedResponse {
 interface Node {
   __typename: string
   createdAt: string
+}
+
+interface PullRequestReviewResponse {
+  respository: {
+    pullRequest: {
+      reviews: {
+        nodes: Node[]
+      }
+    }
+  }
 }
 
 run()
