@@ -1449,6 +1449,7 @@ function run() {
           }
         }
         `, Object.assign(Object.assign({}, github.context.repo), { number: pr.number }));
+                core.info(JSON.stringify(pullRequestResponse));
                 if (pullRequestResponse.repository.pullRequest.timelineItems.nodes
                     .length === 0) {
                     continue;
