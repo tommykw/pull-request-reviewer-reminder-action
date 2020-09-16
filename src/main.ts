@@ -41,7 +41,8 @@ async function run(): Promise<void> {
         }
         `,
         {
-          ...github.context.repo,
+          owner: github.context.repo.owner,
+          name: github.context.repo.repo,
           number: pr.number
         }
       )
