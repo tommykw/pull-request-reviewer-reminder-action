@@ -47,7 +47,6 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(JSON.stringify(pullRequestResponse))
       if (
         pullRequestResponse.repository.pullRequest.timelineItems.nodes
           .length === 0
