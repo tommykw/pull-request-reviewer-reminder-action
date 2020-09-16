@@ -30,6 +30,14 @@ async function run(): Promise<void> {
                     createdAt
                   }
                 }
+              },
+              reviews(first: 50, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+                nodes {
+                  __typename
+                  ... on PullRequestReview {
+                    createdAt
+                  }
+                }
               }
             }
           }
@@ -41,6 +49,8 @@ async function run(): Promise<void> {
           number: pr.number
         }
       )
+
+      core.info(JSON.stringify(prRequestedReponse))
 
       const currentTime = new Date().getTime()
       const response = prRequestedReponse as PrRequestedResponse

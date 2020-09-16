@@ -1438,6 +1438,14 @@ function run() {
                     createdAt
                   }
                 }
+              },
+              reviews(first: 50, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
+                nodes {
+                  __typename
+                  ... on PullRequestReview {
+                    createdAt
+                  }
+                }
               }
             }
           }
@@ -1447,6 +1455,7 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
+                core.info(JSON.stringify(prRequestedReponse));
                 const currentTime = new Date().getTime();
                 const response = prRequestedReponse;
                 const pullRequestReview = yield octokit.graphql(`
