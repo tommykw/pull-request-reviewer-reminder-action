@@ -1455,30 +1455,8 @@ function run() {
                     name: github.context.repo.repo,
                     number: pr.number
                 });
-                core.info(JSON.stringify(prRequestedReponse));
                 const currentTime = new Date().getTime();
                 const response = prRequestedReponse;
-                const pullRequestReview = yield octokit.graphql(`
-        query($owner: String!, $name: String!, $number: Int!) {
-          repository(owner: $owner, name: $name) {
-            pullRequest(number: $number) {
-              reviews(first: 50, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
-                nodes {
-                  __typename
-                  ... on PullRequestReview {
-                    createdAt
-                  }
-                }
-              }
-            }
-          }
-        }
-        `, {
-                    owner: github.context.repo.owner,
-                    name: github.context.repo.repo,
-                    number: pr.number
-                });
-                const pullRequstReviewRes = pullRequestReview;
                 if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
                     continue;
                 }
@@ -1489,10 +1467,10 @@ function run() {
                     continue;
                 }
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                if (pullRequstReviewRes.repository.pullRequest.reviews.nodes.length > 0) {
+                if (response.repository.pullRequest.reviews.nodes.length > 0) {
                     continue;
                 }
-                core.info(`PullRequestReview createdAt: ${pullRequstReviewRes.repository.pullRequest.reviews.nodes[0].createdAt}`);
+                core.info(`PullRequestReview createdAt: ${response.repository.pullRequest.reviews.nodes[0].createdAt}`);
                 const reviewers = pullRequest.requested_reviewers
                     .map(rr => `@${rr.login}`)
                     .join(', ');
