@@ -50,37 +50,8 @@ async function run(): Promise<void> {
         }
       )
 
-      core.info(JSON.stringify(prRequestedReponse))
-
       const currentTime = new Date().getTime()
-      const response = prRequestedReponse as PrRequestedResponse
-
-      const pullRequestReview = await octokit.graphql(
-        `
-        query($owner: String!, $name: String!, $number: Int!) {
-          repository(owner: $owner, name: $name) {
-            pullRequest(number: $number) {
-              reviews(first: 50, states: [APPROVED, CHANGES_REQUESTED, COMMENTED]) {
-                nodes {
-                  __typename
-                  ... on PullRequestReview {
-                    createdAt
-                  }
-                }
-              }
-            }
-          }
-        }
-        `,
-        {
-          owner: github.context.repo.owner,
-          name: github.context.repo.repo,
-          number: pr.number
-        }
-      )
-
-      const pullRequstReviewRes = pullRequestReview as PullRequestReviewResponse
-
+      const response = prRequestedReponse as PullRequestResponse
       if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
         continue
       }
@@ -103,12 +74,12 @@ async function run(): Promise<void> {
         pull_number: pr.number
       })
 
-      if (pullRequstReviewRes.repository.pullRequest.reviews.nodes.length > 0) {
+      if (response.repository.pullRequest.reviews.nodes.length > 0) {
         continue
       }
 
       core.info(
-        `PullRequestReview createdAt: ${pullRequstReviewRes.repository.pullRequest.reviews.nodes[0].createdAt}`
+        `PullRequestReview createdAt: ${response.repository.pullRequest.reviews.nodes[0].createdAt}`
       )
 
       const reviewers = pullRequest.requested_reviewers
@@ -126,10 +97,13 @@ async function run(): Promise<void> {
   }
 }
 
-interface PrRequestedResponse {
+interface PullRequestResponse {
   repository: {
     pullRequest: {
       timelineItems: {
+        nodes: Node[]
+      }
+      reviews: {
         nodes: Node[]
       }
     }
@@ -139,16 +113,6 @@ interface PrRequestedResponse {
 interface Node {
   __typename: string
   createdAt: string
-}
-
-interface PullRequestReviewResponse {
-  repository: {
-    pullRequest: {
-      reviews: {
-        nodes: Node[]
-      }
-    }
-  }
 }
 
 run()
