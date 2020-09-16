@@ -1420,6 +1420,9 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(core.getInput('github_token'));
         const message = core.getInput('message');
+        const withinHours = parseInt(core.getInput('within_hours'), 10);
+        core.info(`${message}`);
+        core.info(`${withinHours}`);
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             for (const pr of pullRequests) {
@@ -1471,7 +1474,7 @@ function run() {
                     continue;
                 }
                 const prCreatedAt = response.repository.pullRequest.timelineItems.nodes[0].createdAt;
-                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60 * 60 * 24;
+                const pullRequestCreatedTime = new Date(prCreatedAt).getTime() + 60 * 60 * withinHours;
                 core.info(`currentTime: ${currentTime} pullRequestCreatedTime: ${pullRequestCreatedTime}`);
                 if (currentTime < pullRequestCreatedTime) {
                     continue;

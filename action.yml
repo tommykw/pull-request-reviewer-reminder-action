@@ -8,6 +8,9 @@ inputs:
   message:
     required: true
     description: 'message'  
+  within_hours:
+    required: true
+    description: 'within hours'  
 runs:
   using: 'node12'
   main: 'dist/index.js'

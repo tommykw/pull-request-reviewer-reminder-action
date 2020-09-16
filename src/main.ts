@@ -4,6 +4,10 @@ import * as github from '@actions/github'
 async function run(): Promise<void> {
   const octokit = github.getOctokit(core.getInput('github_token'))
   const message = core.getInput('message')
+  const withinHours = parseInt(core.getInput('within_hours'), 10)
+
+  core.info(`${message}`)
+  core.info(`${withinHours}`)
 
   try {
     const {data: pullRequests} = await octokit.pulls.list({
@@ -75,7 +79,7 @@ async function run(): Promise<void> {
         response.repository.pullRequest.timelineItems.nodes[0].createdAt
 
       const pullRequestCreatedTime =
-        new Date(prCreatedAt).getTime() + 60 * 60 * 24
+        new Date(prCreatedAt).getTime() + 60 * 60 * withinHours
 
       core.info(
         `currentTime: ${currentTime} pullRequestCreatedTime: ${pullRequestCreatedTime}`
