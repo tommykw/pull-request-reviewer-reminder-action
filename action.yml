@@ -5,6 +5,9 @@ inputs:
   github_token:
     required: true
     description: 'GitHub token'
+  message:
+    required: true
+    description: 'message'  
 runs:
   using: 'node12'
   main: 'dist/index.js'
