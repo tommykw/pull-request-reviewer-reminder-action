@@ -3,6 +3,7 @@ import * as github from '@actions/github'
 
 async function run(): Promise<void> {
   const octokit = github.getOctokit(core.getInput('github_token'))
+  const message = core.getInput('message')
 
   try {
     const {data: pullRequests} = await octokit.pulls.list({
@@ -88,8 +89,6 @@ async function run(): Promise<void> {
         pull_number: pr.number
       })
 
-      //core.info(JSON.stringify(pullRequest))
-
       if (pullRequstReviewRes.repository.pullRequest.reviews.nodes.length > 0) {
         continue
       }
@@ -105,7 +104,7 @@ async function run(): Promise<void> {
       await octokit.issues.createComment({
         ...github.context.repo,
         issue_number: pullRequest.number,
-        body: `${reviewers} \nレビュー開始から1営業日経過しました。レビューをなるべく優先しましょう。`
+        body: `${reviewers} \n${message}`
       })
     }
   } catch (error) {

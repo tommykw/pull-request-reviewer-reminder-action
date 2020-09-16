@@ -1419,6 +1419,7 @@ const github = __importStar(__webpack_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(core.getInput('github_token'));
+        const message = core.getInput('message');
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
             for (const pr of pullRequests) {
@@ -1476,7 +1477,6 @@ function run() {
                     continue;
                 }
                 const { data: pullRequest } = yield octokit.pulls.get(Object.assign(Object.assign({}, github.context.repo), { pull_number: pr.number }));
-                //core.info(JSON.stringify(pullRequest))
                 if (pullRequstReviewRes.repository.pullRequest.reviews.nodes.length > 0) {
                     continue;
                 }
@@ -1484,7 +1484,7 @@ function run() {
                 const reviewers = pullRequest.requested_reviewers
                     .map(rr => `@${rr.login}`)
                     .join(', ');
-                yield octokit.issues.createComment(Object.assign(Object.assign({}, github.context.repo), { issue_number: pullRequest.number, body: `${reviewers} \nレビュー開始から1営業日経過しました。レビューをなるべく優先しましょう。` }));
+                yield octokit.issues.createComment(Object.assign(Object.assign({}, github.context.repo), { issue_number: pullRequest.number, body: `${reviewers} \n${message}` }));
             }
         }
         catch (error) {
