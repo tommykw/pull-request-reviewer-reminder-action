@@ -3,11 +3,8 @@ import * as github from '@actions/github'
 
 async function run(): Promise<void> {
   const octokit = github.getOctokit(core.getInput('github_token'))
-  const message = core.getInput('message')
+  const message = core.getInput('reminder_message')
   const withinHours = parseInt(core.getInput('within_hours'), 10)
-
-  core.info(`${message}`)
-  core.info(`${withinHours}`)
 
   try {
     const {data: pullRequests} = await octokit.pulls.list({
@@ -18,7 +15,7 @@ async function run(): Promise<void> {
     for (const pr of pullRequests) {
       core.info(`pr title ${pr.title}`)
 
-      const prRequestedReponse = await octokit.graphql(
+      const pullRequestResponse = await octokit.graphql<PullRequestResponse>(
         `
         query($owner: String!, $name: String!, $number: Int!) {
           repository(owner: $owner, name: $name) {
@@ -44,28 +41,28 @@ async function run(): Promise<void> {
         }
         `,
         {
-          owner: github.context.repo.owner,
-          name: github.context.repo.repo,
+          ...github.context.repo,
           number: pr.number
         }
       )
 
-      const currentTime = new Date().getTime()
-      const response = prRequestedReponse as PullRequestResponse
-      if (response.repository.pullRequest.timelineItems.nodes.length === 0) {
+      if (
+        pullRequestResponse.repository.pullRequest.timelineItems.nodes
+          .length === 0
+      ) {
         continue
       }
 
-      const prCreatedAt =
-        response.repository.pullRequest.timelineItems.nodes[0].createdAt
+      const pullRequestCreatedAt =
+        pullRequestResponse.repository.pullRequest.timelineItems.nodes[0]
+          .createdAt
 
-      const pullRequestCreatedTime =
-        new Date(prCreatedAt).getTime() + 60 * 60 * withinHours
+      const currentTime = new Date().getTime()
+      const reviewByTime =
+        new Date(pullRequestCreatedAt).getTime() + 60 * 60 * withinHours
 
-      core.info(
-        `currentTime: ${currentTime} pullRequestCreatedTime: ${pullRequestCreatedTime}`
-      )
-      if (currentTime < pullRequestCreatedTime) {
+      core.info(`currentTime: ${currentTime} reviewByTime: ${reviewByTime}`)
+      if (currentTime < reviewByTime) {
         continue
       }
 
@@ -74,12 +71,12 @@ async function run(): Promise<void> {
         pull_number: pr.number
       })
 
-      if (response.repository.pullRequest.reviews.nodes.length > 0) {
+      if (pullRequestResponse.repository.pullRequest.reviews.nodes.length > 0) {
         continue
       }
 
       core.info(
-        `PullRequestReview createdAt: ${response.repository.pullRequest.reviews.nodes[0].createdAt}`
+        `PullRequestReview createdAt: ${pullRequestResponse.repository.pullRequest.reviews.nodes[0].createdAt}`
       )
 
       const reviewers = pullRequest.requested_reviewers

@@ -5,9 +5,9 @@ inputs:
   github_token:
     required: true
     description: 'GitHub token'
-  message:
+  reminder_message:
     required: true
-    description: 'message'  
+    description: 'reminder message'  
   within_hours:
     required: true
     description: 'within hours'  
