@@ -25,6 +25,6 @@ jobs:
       - uses: actions/checkout@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }} # Required
-          reminder_message: 'One business day has passed since the review started. Give priority to reviews as much as possible.' # Required
-          within_hours: 24 # Required. 
+          reminder_message: 'One business day has passed since the review started. Give priority to reviews as much as possible.' # Required. Messages to send to reviewers on Github.
+          within_hours: 24 # Required. This is the deadline for reviews. If this time is exceeded, a reminder wil be send.
 ```
