@@ -1,6 +1,6 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Pull request reviewer reminder action'
+description: 'Action to send Github mentions when there are pull requests pending for reviews.'
+author: 'Kenji Tomita'
 inputs:
   github_token:
     required: true
@@ -14,3 +14,6 @@ inputs:
 runs:
   using: 'node12'
   main: 'dist/index.js'
+branding:
+  icon: 'git-pull-request'
+  color: 'gray-dark'
