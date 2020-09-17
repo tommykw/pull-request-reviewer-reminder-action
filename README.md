@@ -5,11 +5,11 @@
 # Pull Request reviewer reminder action
 [WIP]
 
-Action to send Github mentions when there are pull requests pending for reviews. This action generated from [actions/typescript-action](https://github.com/actions/hello-world-javascript-action). 
+## Summary
+Action to send Github mentions when there are pull requests pending for reviews. This action generated from [actions/typescript-action](https://github.com/actions/hello-world-javascript-action). The difference from Github's scheduled reminders is that if they haven't been reviewed within the specified time, they will send a mention to the github reviewers. This is useful if you need to check by a certain time.
 
-The difference from Github's scheduled reminders is that if they haven't been reviewed within the specified time, they will send a mention to the github reviewers. This is useful if you need to check by a certain time.
-
-## Example Usage
+## Setup
+Create a file with the following content under `.github/workflows/pull-reqeust-reviewer-reminder.yml`.
 
 ```yml
 name: 'Pull request reviewer reminder'
