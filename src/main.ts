@@ -3,7 +3,7 @@ import * as github from '@actions/github'
 
 async function run(): Promise<void> {
   const octokit = github.getOctokit(core.getInput('github_token'))
-  const message = core.getInput('reminder_message')
+  const reminderMessage = core.getInput('reminder_message')
   const reviewTurnaroundHours = parseInt(
     core.getInput('review_turnaround_hours'),
     10
@@ -37,6 +37,11 @@ async function run(): Promise<void> {
                   ... on PullRequestReview {
                     createdAt
                   }
+                }
+              },
+              comments(first: 100) {
+                nodes {
+                  body
                 }
               }
             }
@@ -84,14 +89,27 @@ async function run(): Promise<void> {
         .map(rr => `@${rr.login}`)
         .join(', ')
 
+      const addReminderComment = `${reviewers} \n${reminderMessage}`
+      const hasReminderComment =
+        pullRequestResponse.repository.pullRequest.comments.nodes.filter(
+          node => {
+            return node.body.match(RegExp(reminderMessage)) != null
+          }
+        ).length > 0
+
+      core.info(`hasReminderComment: ${hasReminderComment}`)
+      if (hasReminderComment) {
+        continue
+      }
+
       await octokit.issues.createComment({
         ...github.context.repo,
         issue_number: pullRequest.number,
-        body: `${reviewers} \n${message}`
+        body: addReminderComment
       })
 
       core.info(
-        `create comment issue_number: ${pullRequest.number} body: ${reviewers} ${message}`
+        `create comment issue_number: ${pullRequest.number} body: ${reviewers} ${addReminderComment}`
       )
     }
   } catch (error) {
@@ -107,6 +125,11 @@ interface PullRequestResponse {
       }
       reviews: {
         nodes: Node[]
+      }
+      comments: {
+        nodes: {
+          body: string
+        }[]
       }
     }
   }
