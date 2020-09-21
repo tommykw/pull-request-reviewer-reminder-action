@@ -1,4 +1,4 @@
-require('./sourcemap-register.js');module.exports =
+gitrequire('./sourcemap-register.js');module.exports =
 /******/ (function(modules, runtime) { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The module cache
@@ -1419,7 +1419,7 @@ const github = __importStar(__webpack_require__(438));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(core.getInput('github_token'));
-        const message = core.getInput('reminder_message');
+        const reminderMessage = core.getInput('reminder_message');
         const reviewTurnaroundHours = parseInt(core.getInput('review_turnaround_hours'), 10);
         try {
             const { data: pullRequests } = yield octokit.pulls.list(Object.assign(Object.assign({}, github.context.repo), { state: 'open' }));
@@ -1443,6 +1443,11 @@ function run() {
                   ... on PullRequestReview {
                     createdAt
                   }
+                }
+              },
+              comments(first: 100) {
+                nodes {
+                  body
                 }
               }
             }
@@ -1473,8 +1478,16 @@ function run() {
                 const reviewers = pullRequest.requested_reviewers
                     .map(rr => `@${rr.login}`)
                     .join(', ');
-                yield octokit.issues.createComment(Object.assign(Object.assign({}, github.context.repo), { issue_number: pullRequest.number, body: `${reviewers} \n${message}` }));
-                core.info(`create comment issue_number: ${pullRequest.number} body: ${reviewers} ${message}`);
+                const addReminderComment = `${reviewers} \n${reminderMessage}`;
+                const hasReminderComment = pullRequestResponse.repository.pullRequest.comments.nodes.filter(node => {
+                    return node.body.match(RegExp(reminderMessage)) != null;
+                }).length > 0;
+                core.info(`hasReminderComment: ${hasReminderComment}`);
+                if (hasReminderComment) {
+                    continue;
+                }
+                yield octokit.issues.createComment(Object.assign(Object.assign({}, github.context.repo), { issue_number: pullRequest.number, body: addReminderComment }));
+                core.info(`create comment issue_number: ${pullRequest.number} body: ${reviewers} ${addReminderComment}`);
             }
         }
         catch (error) {
