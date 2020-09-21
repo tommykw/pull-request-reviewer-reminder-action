@@ -1,8 +1,6 @@
 name: 'reminder-test'
 on:
   push:
-    branches:
-      - main
   schedule:
     - cron: '0 1,2,3,4 * * 1-5'
     
