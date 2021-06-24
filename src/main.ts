@@ -1,7 +1,43 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import axios from 'axios'
+
+async function sendNotification(
+  webhookUrl: string,
+  channel: string,
+  message: string,
+  reviewer: string
+): Promise<void> {
+  try {
+    await axios({
+      method: 'POST',
+      url: webhookUrl,
+      data: {
+        channel,
+        username: reviewer,
+        text: message
+      }
+    })
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e.message)
+  }
+}
+
+function prepareNotification(
+  webhookUrl: string,
+  channel: string,
+  message: string,
+  reviewers: string[]
+): void {
+  reviewers.map(reviewer => {
+    sendNotification(webhookUrl, channel, message, reviewer)
+  })
+}
 
 async function run(): Promise<void> {
+  const webhookUrl = core.getInput('webhook-url')
+  const channel = core.getInput('channel')
   const octokit = github.getOctokit(core.getInput('github_token'))
   const reminderMessage = core.getInput('reminder_message')
   const reviewTurnaroundHours = parseInt(
@@ -111,6 +147,8 @@ async function run(): Promise<void> {
       core.info(
         `create comment issue_number: ${pullRequest.number} body: ${reviewers} ${addReminderComment}`
       )
+
+      prepareNotification(webhookUrl, channel, reminderMessage, reviewers)
     }
   } catch (error) {
     core.setFailed(error.message)
