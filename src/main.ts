@@ -28,9 +28,9 @@ function prepareNotification(
   webhookUrl: string,
   channel: string,
   message: string,
-  reviewers: string[]
+  reviewers: string
 ): void {
-  reviewers.map(reviewer => {
+  reviewers.split(', ').map(reviewer => {
     sendNotification(webhookUrl, channel, message, reviewer)
   })
 }
