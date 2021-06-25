@@ -11,6 +11,12 @@ inputs:
   review_turnaround_hours:
     required: true
     description: 'This is the deadline for reviews. If this time is exceeded, a reminder wil be send.'
+  webhook-url:
+    required: true
+    description: 'Mattermost webhook url.'
+  channel:
+    required: true
+    description: 'Mattermost channel name.'
 runs:
   using: 'node12'
   main: 'dist/index.js'
