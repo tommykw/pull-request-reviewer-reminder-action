@@ -1,6 +1,15 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import axios from 'axios'
+import mappedUsers from './mappedUsers.json'
+
+export interface IMappedUser {
+  [key: string]: {
+    mmId: string
+    mmUsername: string
+    mmEmail: string
+  }
+}
 
 async function sendNotification(
   webhookUrl: string,
@@ -31,7 +40,9 @@ function prepareNotification(
   reviewers: string
 ): void {
   reviewers.split(', ').map(reviewer => {
-    sendNotification(webhookUrl, channel, message, reviewer)
+    const mmUser = (mappedUsers as IMappedUser)[reviewer].mmUsername
+    if (!mmUser) return
+    sendNotification(webhookUrl, channel, message, mmUser)
   })
 }
 
