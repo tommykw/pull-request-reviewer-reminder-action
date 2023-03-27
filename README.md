@@ -19,9 +19,12 @@ jobs:
   pull-request-reviewer-reminder: 
     runs-on: ubuntu-latest
     steps:
-      - uses: tommykw/pull-request-reviewer-reminder-action@v1
+      - uses: tommykw/pull-request-reviewer-reminder-action@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }} # Required
           reminder_message: 'One business day has passed since the review started. Give priority to reviews as much as possible.' # Required. Messages to send to reviewers on Github.
           review_turnaround_hours: 24 # Required. This is the deadline for reviews. If this time is exceeded, a reminder wil be send.
 ```
+
+## License
+MIT
