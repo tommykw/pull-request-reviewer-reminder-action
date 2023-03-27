@@ -1,6 +1,4 @@
-<p align="center">
-  <a href="https://github.com/tommykw/pull-request-reviewer-reminder-action/actions"><img alt="pull-request-reviewer-reminder-action status" src="https://github.com/tommykw/pull-request-reviewer-reminder-action/workflows/build-test/badge.svg"></a>
-</p>
+[![reminder-test](https://github.com/tommykw/pull-request-reviewer-reminder-action/actions/workflows/test.yml/badge.svg)](https://github.com/tommykw/pull-request-reviewer-reminder-action/actions/workflows/test.yml)
 
 # Pull Request reviewer reminder action
 
